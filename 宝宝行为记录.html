@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover" />
+    <title>宝宝行为记录</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/vue@next"></script>
+    <link rel="stylesheet" href="https://unpkg.com/element-plus/dist/index.css" />
+    <script src="https://unpkg.com/element-plus"></script>
+
+</head>
+<body>
+    <div id="app">
+        <div>
+            <table border="2px" width="100%">  
+                <tr>  
+                    <td>日期时间</td>  
+                    <td>小便</td>  
+                    <td>大便</td>  
+                    <td>奶粉(ml)</td>  
+                    <td>母乳(ml)</td>  
+                </tr>  
+                <tr v-for="item in test" :key="item">  
+                    <td>
+                        <input type="datetime-local" v-model="item.a" name="appointment-time" @input="abc">
+                    </td>  
+                    <td>
+                        <input type="checkbox" name="option1" v-model="item.b" @input="abc">
+                    </td>  
+                    <td>
+                        <input type="checkbox" name="option1" v-model="item.c" @input="abc">
+                    </td>  
+                    <td>
+                        <input style="width: 50px;" type="text" v-model="item.d" @input="abc">
+                    </td>  
+                    <td>
+                        <input style="width: 50px;" type="text" v-model="item.e" @input="abc">
+                    </td>  
+                </tr>  
+            </table>
+            <button type="button" @click="addItem">加一行</button>
+        </div>
+    </div>
+</body>
+
+<script>
+    //使用 vue3 的基本格式
+    const {createApp , ref, onMounted } = Vue
+    const app =  createApp({
+        setup(){
+            //测试变量
+            const test = ref([])
+            onMounted(() => {
+                const jsonArray = localStorage.getItem('testList');
+                test.value = jsonArray ? JSON.parse(jsonArray) : [];
+                console.log(jsonArray);
+            });
+            //测试函数
+            const fun_test = () => {
+                console.log("test");
+                
+            }
+            const abc = (e) =>{
+                getlocalStorage()
+            }
+            const getlocalStorage = () =>{
+                const jsonArray = JSON.stringify(test.value);
+                localStorage.setItem('testList', jsonArray)
+            }
+            const addItem = (e) =>{
+                test.value.push({})
+                getlocalStorage()
+            }
+            //h5页面必须把名称return，vite中不需要（重要区别）
+            return {
+                test,
+                fun_test,
+                abc,
+                addItem,
+                getlocalStorage
+            }
+        }
+    })
+    //应用vue（就是挂载在上面ID绑定的元素上）
+    app.mount("#app")
+</script>
+</html>
