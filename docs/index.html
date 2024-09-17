@@ -8,7 +8,12 @@
     <script src="https://unpkg.com/vue@next"></script>
     <link rel="stylesheet" href="https://unpkg.com/element-plus/dist/index.css" />
     <script src="https://unpkg.com/element-plus"></script>
-
+    <style>
+        html body {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
 </head>
 <body>
     <div id="app">
@@ -20,10 +25,11 @@
                     <td>大便</td>  
                     <td>奶粉(ml)</td>  
                     <td>母乳(ml)</td>  
+                    <td>操作</td>  
                 </tr>  
-                <tr v-for="item in test" :key="item">  
+                <tr v-for="(item,index) in test" :key="item">  
                     <td>
-                        <input type="datetime-local" v-model="item.a" name="appointment-time" @input="abc">
+                        <input style="width: 150px;" type="datetime-local" v-model="item.a" name="appointment-time" @input="abc">
                     </td>  
                     <td>
                         <input type="checkbox" name="option1" v-model="item.b" @input="abc">
@@ -32,11 +38,20 @@
                         <input type="checkbox" name="option1" v-model="item.c" @input="abc">
                     </td>  
                     <td>
-                        <input style="width: 50px;" type="text" v-model="item.d" @input="abc">
+                        <!-- <input style="width: 50px;" type="text" v-model="item.d" @input="abc"> -->
+                        <select v-model="item.d" name="fruits" @change="abc">
+                            <option v-for="sonItem in selectMlList" :key="sonItem" :value="sonItem.value">{{sonItem.label}}</option>
+                        </select>
                     </td>  
                     <td>
-                        <input style="width: 50px;" type="text" v-model="item.e" @input="abc">
+                        <!-- <input style="width: 50px;" type="text" v-model="item.e" @input="abc"> -->
+                        <select v-model="item.e" name="fruits" @change="abc">
+                            <option v-for="sonItem in selectMlList" :key="sonItem" :value="sonItem.value">{{sonItem.label}}</option>
+                        </select>
                     </td>  
+                    <td>
+                        <button type="button" @click="delItem(index)">删除</button>
+                    </td>
                 </tr>  
             </table>
             <button type="button" @click="addItem">加一行</button>
@@ -50,6 +65,38 @@
     const app =  createApp({
         setup(){
             //测试变量
+            const selectMlList = ref([
+                {value: 10, label: '10'},
+                {value: 15, label: '15'},
+                {value: 20, label: '20'},
+                {value: 25, label: '25'},
+                {value: 30, label: '30'},
+                {value: 35, label: '35'},
+                {value: 40, label: '40'},
+                {value: 45, label: '45'},
+                {value: 50, label: '50'},
+                {value: 55, label: '55'},
+                {value: 60, label: '60'},
+                {value: 65, label: '65'},
+                {value: 75, label: '75'},
+                {value: 80, label: '80'},
+                {value: 85, label: '85'},
+                {value: 90, label: '90'},
+                {value: 95, label: '95'},
+                {value: 100, label: '100'},
+                {value: 105, label: '105'},
+                {value: 110, label: '110'},
+                {value: 115, label: '115'},
+                {value: 120, label: '120'},
+                {value: 125, label: '125'},
+                {value: 130, label: '130'},
+                {value: 135, label: '135'},
+                {value: 140, label: '140'},
+                {value: 145, label: '145'},
+                {value: 150, label: '150'},
+                {value: 155, label: '155'},
+                {value: 160, label: '160'},
+            ])
             const test = ref([])
             onMounted(() => {
                 const jsonArray = localStorage.getItem('testList');
@@ -72,12 +119,19 @@
                 test.value.push({})
                 getlocalStorage()
             }
+            const delItem = (idx) =>{
+                test.value.splice(idx, 1);
+                getlocalStorage()
+            }
+            
             //h5页面必须把名称return，vite中不需要（重要区别）
             return {
                 test,
+                selectMlList,
                 fun_test,
                 abc,
                 addItem,
+                delItem,
                 getlocalStorage
             }
         }
